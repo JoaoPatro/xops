@@ -4,15 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-  "start": "node src/server.js",
-  "test": "jest --coverage",
-  "lint": "eslint . --ext .js"
-}
-,
+    "start": "node src/server.js",
+    "test": "jest --coverage",
+    "lint": "eslint . --ext .js"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^17.2.3",
     "express": "^5.1.0"
   },
   "devDependencies": {
