@@ -2,26 +2,29 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, "XOPS-*" ]    # 🔹 corre também nas tuas branches XOPS
   pull_request:
-    branches: [ main ]
+    branches: [ main ]              # 🔹 e quando fazes PR para main
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: 📥 Checkout do repositório
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: ⚙️ Configurar Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: 20
           cache: 'npm'
 
-      - name: Install dependencies
+      - name: 📦 Instalar dependências
         run: npm ci
 
-      - name: Run tests
-        run: npx jest --coverage
+      - name: 🧪 Correr testes Jest
+        run: npm test
+
+      - name: 📊 Gerar relatório de cobertura
+        run: npm run coverage --if-present
