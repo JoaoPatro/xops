@@ -82,13 +82,14 @@ function readCodeFiles() {
     });
 
     const raw = response.choices?.[0]?.message?.content?.trim();
-    console.log('📦 Resposta RAW da IA:');
-    console.log(raw);
-    console.log('----------------------------------------');
+console.log('📦 Resposta RAW da IA:');
+console.log(raw);
+console.log('----------------------------------------');
 
-    let result;
-    try {
-      result = JSON.parse(raw);
+let result;
+try {
+  result = JSON.parse(raw);
+
     } catch (parseErr) {
       console.error('⚠️ Não foi possível fazer parse do JSON devolvido pela IA.');
       console.error('Erro:', parseErr.message);
