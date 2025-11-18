@@ -82,13 +82,12 @@ function readCodeFiles() {
     });
 
     const raw = response.choices?.[0]?.message?.content?.trim();
-console.log('📦 Resposta RAW da IA:');
-console.log(raw);
-console.log('----------------------------------------');
 
+// Se quiseres podes só guardar o raw sem mostrar:
 let result;
 try {
   result = JSON.parse(raw);
+
 
     } catch (parseErr) {
       console.error('⚠️ Não foi possível fazer parse do JSON devolvido pela IA.');
