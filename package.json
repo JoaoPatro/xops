@@ -1,30 +1,25 @@
 {
   "name": "xops",
   "version": "1.0.0",
-  "description": "Projeto XOPS",
-  "main": "src/server.js",
+  "description": "",
+  "main": "index.js",
   "scripts": {
     "start": "node src/server.js",
     "test": "jest --coverage",
-    "lint": "eslint --ext .js src",
+    "lint": "eslint . --ext .js",
     "ai-review": "node ai-review.js"
   },
   "keywords": [],
-  "author": "João e João",
+  "author": "",
   "license": "ISC",
   "dependencies": {
-    "dotenv": "^16.3.1",
-    "express": "^4.18.2"
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "openai": "^4.0.0"
   },
   "devDependencies": {
-    "eslint": "^9.3.0",
-    "jest": "^30.0.0",
+    "eslint": "^9.37.0",
+    "jest": "^30.2.0",
     "supertest": "^7.1.4"
-  },
-  "jest": {
-    "testEnvironment": "node",
-    "collectCoverage": true,
-    "coverageDirectory": "coverage",
-    "coverageReporters": ["text", "lcov"]
   }
 }

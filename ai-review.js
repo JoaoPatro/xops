@@ -1,43 +1,81 @@
-// XOPS-23: Exemplo de integração de IA no pipeline
+// ai-review.js
+// Script que faz uma chamada REAL à API da OpenAI para rever o código
 
+require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
+const OpenAI = require('openai');
 
-// Normalmente viriam de secrets do GitHub
+// 1) Ler chave da variável de ambiente
 const apiKey = process.env.OPENAI_API_KEY;
-
-// Pequeno contexto: vamos enviar um resumo de ficheiros para a IA
-function getFilesSummary() {
-  const srcDir = path.join(__dirname, 'src');
-  const files = fs.readdirSync(srcDir).filter(f => f.endsWith('.js'));
-
-  const summary = files.map(file => {
-    const content = fs.readFileSync(path.join(srcDir, file), 'utf8');
-    return `// File: ${file}\n${content.substring(0, 400)}\n`;
-  }).join('\n');
-
-  return summary;
+if (!apiKey) {
+  console.error('❌ OPENAI_API_KEY não definida. Verifica o .env (local) ou os Secrets do GitHub.');
+  process.exit(1);
 }
 
-async function run() {
-  if (!apiKey) {
-    console.log('🤖 [AI Review] OPENAI_API_KEY não definido. A integrar IA via pipeline, mas a correr em modo demo.');
-    process.exit(0);
+// 2) Criar cliente OpenAI
+const client = new OpenAI({ apiKey });
+
+/**
+ * Lê o ficheiro de código que queremos rever.
+ * Aqui vou usar o src/index.js e src/server.js como exemplo.
+ */
+function readCodeFiles() {
+  const files = ['src/index.js', 'src/server.js'];
+  let content = '';
+
+  for (const file of files) {
+    const fullPath = path.join(__dirname, file);
+    if (fs.existsSync(fullPath)) {
+      const code = fs.readFileSync(fullPath, 'utf8');
+      content += `\n\n// File: ${file}\n${code}\n`;
+    } else {
+      content += `\n\n// File: ${file} (NÃO ENCONTRADO)\n`;
+    }
   }
 
-  const prompt = `
-Faz uma revisão rápida de qualidade e boas práticas para o seguinte código Node.js Express.
-Responde em 5 pontos objetivos:
-${getFilesSummary()}
-  `;
-
-  // NOTA: Exemplo de chamada. No ambiente real seria preciso fetch/axios.
-  // Aqui só mostramos a integração estrutural.
-  console.log('🤖 [AI Review] IA integrada. Exemplo: aqui faríamos uma chamada à API com o código.');
-  console.log('Prompt gerado para IA:\n', prompt.substring(0, 600), '...\n');
+  return content;
 }
 
-run().catch(err => {
-  console.error('Erro na AI Review:', err);
-  process.exit(1);
-});
+(async () => {
+  try {
+    const codeToReview = readCodeFiles();
+
+    console.log(' [AI Review] A chamar a API da OpenAI para rever o código...');
+    console.log('----------------------------------------');
+
+    // 3) Chamar a API de chat/completions (modelo moderno)
+    const response = await client.chat.completions.create({
+      model: 'gpt-4.1-mini',
+      messages: [
+        {
+          role: 'system',
+          content:
+            'És um revisor de código Node.js/Express. Foca-te em qualidade, boas práticas, segurança ' +
+            'e clareza. Responde em português de Portugal, em poucos pontos objetivos.'
+        },
+        {
+          role: 'user',
+          content:
+            'Faz uma revisão rápida de qualidade e boas práticas para o seguinte código. ' +
+            'Dá uma resposta em 5 pontos objetivos:\n\n' +
+            codeToReview
+        }
+      ],
+      temperature: 0.2,
+      max_tokens: 600
+    });
+
+    const aiText = response.choices[0].message.content;
+
+    console.log(' Resposta da IA:');
+    console.log('----------------------------------------');
+    console.log(aiText);
+    console.log('----------------------------------------');
+
+  } catch (err) {
+    console.error(' Erro ao chamar a API da OpenAI:');
+    console.error(err.message || err);
+    process.exit(1);
+  }
+})();
