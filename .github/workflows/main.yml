@@ -2,29 +2,43 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ main, "XOPS-*" ]    # 🔹 corre também nas tuas branches XOPS
+    branches: [ main, "XOPS-*" ]
   pull_request:
-    branches: [ main ]              # 🔹 e quando fazes PR para main
+    branches: [ main ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
+      # 1️⃣ Checkout do repositório
       - name: 📥 Checkout do repositório
         uses: actions/checkout@v4
 
+      # 2️⃣ Configurar Node.js
       - name: ⚙️ Configurar Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
+          cache: npm
 
+      # 3️⃣ Instalar dependências
       - name: 📦 Instalar dependências
         run: npm ci
 
+      # 4️⃣ Executar testes Jest com cobertura
       - name: 🧪 Correr testes Jest
-        run: npm test
+        run: npm test -- --coverage
 
-      - name: 📊 Gerar relatório de cobertura
-        run: npm run coverage --if-present
+      # 5️⃣ Guardar relatório de cobertura (artefacto)
+      - name: 📊 Guardar relatório de cobertura
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage
+
+      # 6️⃣ Etapa de integração com IA (XOPS-23)
+      - name: 🤖 AI code review (XOPS-23)
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: npm run ai-review
