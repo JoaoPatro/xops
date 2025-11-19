@@ -104,7 +104,7 @@ function extractJson(raw) {
       const jsonText = extractJson(raw);
       parsed = JSON.parse(jsonText);
     } catch (parseErr) {
-      console.error('⚠️ [AI SAST] Não foi possível fazer parse do JSON devolvido pela IA.');
+      console.error(' [AI SAST] Não foi possível fazer parse do JSON devolvido pela IA.');
       console.error('Erro:', parseErr.message);
       console.error('A correr em modo permissivo (não reprova o pipeline).');
       process.exit(0);
@@ -122,21 +122,21 @@ function extractJson(raw) {
     console.log('----------------------------------------');
 
     if (typeof score !== 'number' || !nivel) {
-      console.error('⚠️ [AI SAST] Formato inesperado. Não vou reprovar o pipeline.');
+      console.error(' [AI SAST] Formato inesperado. Não vou reprovar o pipeline.');
       process.exit(0);
     }
 
     // Quality gate de segurança
     if (nivel === 'CRITICAL' || score < SECURITY_THRESHOLD_FAIL) {
-      console.error('❌ [AI SAST] Segurança insuficiente (nível CRITICAL ou score baixo).');
+      console.error(' [AI SAST] Segurança insuficiente (nível CRITICAL ou score baixo).');
       process.exit(1);
     }
 
-    console.log('✅ [AI SAST] Análise de segurança passou.');
+    console.log(' [AI SAST] Análise de segurança passou.');
     process.exit(0);
 
   } catch (err) {
-    console.error('❌ [AI SAST] Erro ao chamar a API da OpenAI:');
+    console.error(' [AI SAST] Erro ao chamar a API da OpenAI:');
     console.error(err.message || err);
     // Em caso de erro técnico, não rebenta o pipeline todo
     process.exit(0);
