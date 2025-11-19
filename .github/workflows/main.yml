@@ -11,34 +11,37 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout do repositório
-      - name: 📥 Checkout do repositório
+      # 1 Checkout do repositório
+      - name:  Checkout do repositório
         uses: actions/checkout@v4
 
-      # 2️⃣ Configurar Node.js
-      - name: ⚙️ Configurar Node.js
+      # 2 Configurar Node.js
+      - name:  Configurar Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
 
-      # 3️⃣ Instalar dependências
-      - name: 📦 Instalar dependências
+      # 3 Instalar dependências
+      - name:  Instalar dependências
         run: npm ci
 
-      # 4️⃣ Executar testes Jest com cobertura
-      - name: 🧪 Correr testes Jest
+      # 4 Executar testes Jest com cobertura
+      - name:  Correr testes Jest
         run: npm test -- --coverage
 
-      # 5️⃣ Guardar relatório de cobertura (artefacto)
-      - name: 📊 Guardar relatório de cobertura
+      # 5 Guardar relatório de cobertura (artefacto)
+      - name:  Guardar relatório de cobertura
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: coverage
 
-      # 6️⃣ Etapa de integração com IA (XOPS-23)
-      - name: 🤖 AI code review (XOPS-23)
+      # 6 Etapa de integração com IA (XOPS-23)
+      - name:  AI code review (XOPS-23)
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: npm run ai-review
+
+      - name: Run AI SAST security gate
+        run: node ai-sast.js
