@@ -48,3 +48,4 @@ jobs:
         run: npm run ai-sast
         env:
          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+#teste
