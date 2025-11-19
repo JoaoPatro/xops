@@ -42,4 +42,9 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: npm run ai-review
-# test
+
+        # 7) Executar AI SAST Security Gate (XOPS-24)
+      - name: Run AI SAST security gate
+        run: npm run ai-sast
+        env:
+         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
