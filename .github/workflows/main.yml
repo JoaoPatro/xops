@@ -44,4 +44,6 @@ jobs:
         run: npm run ai-review
 
       - name: Run AI SAST security gate
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: node ai-sast.js
