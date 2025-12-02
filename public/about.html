@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projeto XOPS – CI/CD Inteligente</title>
+
+  <style>
+    :root {
+      --bg: #050816;
+      --bg-card: #020617;
+      --bg-card-soft: #0b1220;
+      --accent: #22c55e;
+      --accent-soft: rgba(34, 197, 94, 0.1);
+      --accent-strong: #4ade80;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --border-subtle: #1f2937;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background: radial-gradient(circle at top, #111827, #020617);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 960px;
+      padding: 1.5rem;
+    }
+
+    header {
+      margin-bottom: 2rem;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.25rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid var(--accent-soft);
+      background: rgba(15, 23, 42, 0.9);
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .tag-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 8px rgba(34, 197, 94, 0.8);
+    }
+
+    h1 {
+      font-size: 2.3rem;
+      margin-bottom: 0.3rem;
+      letter-spacing: 0.02em;
+    }
+
+    h1 span {
+      color: var(--accent);
+    }
+
+    p.lead {
+      color: var(--muted);
+      max-width: 720px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.2fr);
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (max-width: 800px) {
+      .grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .card {
+      background: linear-gradient(135deg, var(--bg-card), var(--bg-card-soft));
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 1.4rem 1.5rem;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.6);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(34, 197, 94, 0.18), transparent 55%);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .card h2 {
+      position: relative;
+      z-index: 1;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent-strong);
+      margin-bottom: 0.6rem;
+    }
+
+    .card p,
+    .card ul {
+      position: relative;
+      z-index: 1;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .card ul {
+      margin-top: 0.4rem;
+      margin-left: 1rem;
+    }
+
+    .card ul li {
+      margin-bottom: 0.35rem;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 0.7rem;
+    }
+
+    .pill {
+      font-size: 0.7rem;
+      padding: 0.16rem 0.55rem;
+      border-radius: 999px;
+      border: 1px solid var(--accent-soft);
+      color: var(--accent-strong);
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(8px);
+    }
+
+    .pill.secondary {
+      color: var(--muted);
+      border-color: rgba(148, 163, 184, 0.4);
+    }
+
+    .section-title {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--muted);
+      margin-top: 0.5rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .footer {
+      margin-top: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(15, 23, 42, 0.9);
+      font-size: 0.8rem;
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer span strong {
+      color: var(--accent-strong);
+      font-weight: 600;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .footer-pill {
+      font-size: 0.75rem;
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      color: var(--muted);
+    }
+
+    .footer-pill code {
+      font-size: 0.75rem;
+      color: var(--accent-strong);
+    }
+
+    code {
+      font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.8rem;
+      padding: 0 0.2rem;
+      border-radius: 4px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      color: var(--accent-strong);
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+    <header>
+      <div class="tag">
+        <span class="tag-dot"></span>
+        Projeto XOPS · CI/CD Inteligente com IA
+      </div>
+      <h1>Sobre o projeto</h1>
+      <p class="lead">
+        Este projeto é focado em
+        conceber, implementar e avaliar uma <strong>pipeline CI/CD inteligente</strong>
+        com quality gates potenciados por IA</em>.
+      </p>
+    </header>
+
+    <section class="grid">
+      <!-- VISÃO GERAL -->
+      <article class="card">
+        <h2>Visão geral</h2>
+        <p>
+          A aplicação é uma pequena API em <strong>Node.js/Express</strong> que serve de
+          base para o pipeline. O foco não é a complexidade funcional, mas sim a
+          qualidade do código e segurança da pipeline.
+    
+        </p>
+
+        <p class="section-title">O que a pipeline faz?</p>
+        <ul>
+          <li>Compila e instala dependências do projeto.</li>
+          <li>Corre testes automáticos com <strong>Jest + Supertest</strong>.</li>
+          <li>Gera relatórios de cobertura (lcov / clover).</li>
+          <li>Usa IA para <strong>revisão de código</strong> (quality gate).</li>
+          <li>Usa IA para <strong>SAST</strong> – análise estática de segurança.</li>
+        </ul>
+
+        <div class="pill-row">
+          <span class="pill">DevOps</span>
+          <span class="pill">DevSecOps</span>
+          <span class="pill secondary">CI/CD inteligente</span>
+          <span class="pill secondary">Qualidade + Segurança</span>
+        </div>
+      </article>
+
+      <!-- IA E QUALITY GATES -->
+      <article class="card">
+        <h2>IA integrada no pipeline</h2>
+        <p>
+          O projeto integra <strong>ferramentas baseadas em LLM</strong> diretamente na
+          pipeline. Em vez de a IA ser “um extra”, ela faz parte do processo de
+          decisão sobre se o commit é aceite ou não.
+        </p>
+
+        <p class="section-title">Quality gates com IA</p>
+        <ul>
+          <li>
+            <code>ai-review.js</code> – analisa o código e devolve um
+            <strong>score de qualidade</strong>, nível
+            (<em>OK / WARNING / CRITICAL</em>) e comentários de melhoria.
+          </li>
+          <li>
+            <code>ai-sast.js</code> – faz <strong>SAST</strong>, procura vulnerabilidades
+            comuns e recomenda boas práticas de segurança.
+          </li>
+          <li>
+            Se o nível for <em>CRITICAL</em> ou o score ficar abaixo do limite,
+            o <strong>build é reprovado</strong>.
+          </li>
+        </ul>
+
+        <div class="pill-row">
+          <span class="pill">OpenAI API</span>
+          <span class="pill">Code Review LLM</span>
+          <span class="pill">SAST por IA</span>
+          <span class="pill secondary">AI-augmented quality gates</span>
+        </div>
+      </article>
+    </section>
+
+    <section class="grid">
+      <!-- PIPELINE CI/CD -->
+      <article class="card">
+        <h2>Pipeline CI/CD do XOPS</h2>
+        <p>
+          A pipeline é definida em <code>.github/workflows/main.yml</code> e
+          corre automaticamente em cada <strong>push</strong> ou
+          <strong>pull request</strong>.
+        </p>
+
+        <p class="section-title">Etapas principais</p>
+        <ul>
+          <li>Checkout do repositório.</li>
+          <li>Configuração do Node.js e cache de dependências.</li>
+          <li>Instalação de pacotes com <code>npm ci</code>.</li>
+          <li>Execução de testes unitários com cobertura.</li>
+          <li>Upload do relatório de cobertura como artefacto.</li>
+          <li>Execução do <code>npm run ai-review</code>.</li>
+          <li>Execução do <code>npm run ai-sast</code> (security gate).</li>
+        </ul>
+
+        <div class="pill-row">
+          <span class="pill">GitHub Actions</span>
+          <span class="pill">Testes + Cobertura</span>
+          <span class="pill secondary">Artefactos de build</span>
+        </div>
+      </article>
+
+      <!-- STACK E ENDPOINTS -->
+      <article class="card">
+        <h2>Stack & Endpoints</h2>
+        <p>
+          A API expõe poucos endpoints, suficientes para demonstrar testes,
+          cobertura e integração com a IA.
+        </p>
+
+        <p class="section-title">Stack técnica</p>
+        <ul>
+          <li><strong>Node.js + Express</strong> para a API.</li>
+          <li><strong>Jest + Supertest</strong> para testes.</li>
+          <li><strong>dotenv</strong> para variáveis de ambiente.</li>
+          <li><strong>OpenAI</strong> para code review e SAST.</li>
+        </ul>
+
+        <p class="section-title">Endpoints da API</p>
+        <ul>
+          <li><code>GET /</code> – mensagem simples “Hello from Sprint 13”.</li>
+          <li><code>GET /users</code> – lista de utilizadores em JSON (usado nos testes).</li>
+          <li><code>GET /about</code> – esta página HTML de apresentação do projeto.</li>
+        </ul>
+
+        <div class="pill-row">
+          <span class="pill">API didática</span>
+          <span class="pill secondary">Node + Jest + Express</span>
+        </div>
+      </article>
+    </section>
+
+    <footer class="footer">
+      <span>
+        Desenvolvido por <strong>João Patrocínio e João Silva</strong> · Unidade Curricular <strong>XOPS</strong>
+      </span>
+      <div class="footer-links">
+        <span class="footer-pill">Pipeline: <code>Node.js CI</code> em GitHub Actions</span>
+        <span class="footer-pill">Endpoints rápidos: <code>/about</code> · <code>/users</code></span>
+      </div>
+    </footer>
+  </main>
+</body>
+</html>

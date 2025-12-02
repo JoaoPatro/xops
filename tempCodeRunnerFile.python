@@ -1,0 +1,19 @@
+def ordena_decrescente(L: list):
+    n = len(L)
+
+    for i in range(n):
+        # assumimos que o máximo a partir de i está em i
+        pos_max = i
+
+        # procurar o máximo entre as posições i+1 até ao fim
+        for j in range(i + 1, n):
+            if L[j] > L[pos_max]:
+                pos_max = j
+
+        # trocar o L[i] com o L[pos_max]
+        temp = L[i]
+        L[i] = L[pos_max]
+        L[pos_max] = temp
+valores = [10, 1, 9, 2]
+ordena_decrescente(valores)
+print(valores)  # [9, 4, 2, 1]

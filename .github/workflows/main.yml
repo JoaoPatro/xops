@@ -12,7 +12,7 @@ jobs:
 
     steps:
       # 1️⃣ Checkout do repositório
-      - name: 📥 Checkout do repositório
+      - name:  Checkout do repositório
         uses: actions/checkout@v4
 
       # 2️⃣ Configurar Node.js
@@ -23,22 +23,22 @@ jobs:
           cache: npm
 
       # 3️⃣ Instalar dependências
-      - name: 📦 Instalar dependências
+      - name:  Instalar dependências
         run: npm ci
 
       # 4️⃣ Executar testes Jest com cobertura
-      - name: 🧪 Correr testes Jest
+      - name:  Correr testes Jest
         run: npm test -- --coverage
 
       # 5️⃣ Guardar relatório de cobertura (artefacto)
-      - name: 📊 Guardar relatório de cobertura
+      - name:  Guardar relatório de cobertura
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: coverage
 
       # 6️⃣ Etapa de integração com IA (XOPS-23)
-      - name: 🤖 AI code review (XOPS-23)
+      - name:  AI code review (XOPS-23)
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: npm run ai-review
