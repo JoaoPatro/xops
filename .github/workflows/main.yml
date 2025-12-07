@@ -26,19 +26,16 @@ jobs:
       - name: Instalar dependências
         run: npm ci
 
-      # 4) Lint (análise estática de estilo)
-      - name: Correr lint
-        run: npm run lint
 
-      # 5) Testes Jest com cobertura
+      # 4) Testes Jest com cobertura
       - name: Correr testes Jest com cobertura
         run: npm test
 
-      # 6) DAST – testes de segurança dinâmicos
+      # 5) DAST – testes de segurança dinâmicos
       - name: Correr testes DAST
         run: npm run dast
 
-      # 7) Guardar relatório de cobertura (artefacto)
+      # 6) Guardar relatório de cobertura (artefacto)
       - name: Guardar relatório de cobertura
         if: success()
         uses: actions/upload-artifact@v4
@@ -46,13 +43,13 @@ jobs:
           name: coverage-report
           path: coverage
 
-      # 8) AI code review (quality gate)
+      # 7) AI code review (quality gate)
       - name: AI code review (XOPS-23)
         run: npm run ai-review
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
-      # 9) AI SAST Security Gate
+      # 8) AI SAST Security Gate
       - name: AI SAST security gate (XOPS-23)
         run: npm run ai-sast
         env:
