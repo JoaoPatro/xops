@@ -18,7 +18,7 @@ const client = new OpenAI({ apiKey });
 
 /**
  * Lê o ficheiro de código que queremos rever.
- * Aqui usamos o src/index.js e src/server.js como exemplo.
+ * usamos o src/index.js e src/server.js como exemplo.
  */
 function readCodeFiles() {
   const files = ['src/index.js', 'src/server.js'];
@@ -42,7 +42,7 @@ function readCodeFiles() {
     const codeToReview = readCodeFiles();
 
     console.log(' [AI Review] A chamar a API da OpenAI para rever o código...');
-    console.log('----------------------------------------');
+
 
     // 3) Chamar a API de chat/completions 
     const response = await client.chat.completions.create({
@@ -69,9 +69,7 @@ function readCodeFiles() {
     const aiText = response.choices[0].message.content;
 
     console.log(' Resposta da IA:');
-    console.log('----------------------------------------');
     console.log(aiText);
-    console.log('----------------------------------------');
 
   } catch (err) {
     console.error(' Erro ao chamar a API da OpenAI:');
