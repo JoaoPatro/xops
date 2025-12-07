@@ -1,26 +1,29 @@
 // src/index.js
-// Ficheiro principal da aplicação Express. Define rotas e exporta o app.
+// Aplicação Express com rotas básicas, healthcheck e suporte para dashboard.
 
 const express = require('express');
 const path = require('path');
 
 const app = express();
 
-// Middleware básico
 app.use(express.json());
 
-// Caminho para a pasta pública (onde está o about.html)
 const publicPath = path.join(__dirname, '..', 'public');
 
-// Servir ficheiros estáticos da pasta public
+// ficheiros estáticos
 app.use(express.static(publicPath));
 
-// Rota principal usada nos testes automatizados
+// / -> health + info básica
 app.get('/', (req, res) => {
-  res.json({ msg: 'Hello from Sprint 13' });
+  res.json({
+    msg: 'API operacional',
+    status: 'ok',
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString()
+  });
 });
 
-// Lista simples de utilizadores (devolvida em /users)
+// /users
 app.get('/users', (req, res) => {
   res.json([
     { id: 1, name: 'João' },
@@ -29,14 +32,19 @@ app.get('/users', (req, res) => {
   ]);
 });
 
-// Rota para devolver a página about.html
+// /about
 app.get('/about', (req, res) => {
   res.sendFile(path.join(publicPath, 'about.html'));
 });
 
-// Rota alternativa para aceder diretamente a /about.html
+// /about.html
 app.get('/about.html', (req, res) => {
   res.sendFile(path.join(publicPath, 'about.html'));
+});
+
+// /monitor -> redireciona para o HTML
+app.get('/monitor', (req, res) => {
+  res.redirect('/monitor.html');
 });
 
 module.exports = app;

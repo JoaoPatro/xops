@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <title>Monitorização da API XOPS</title>
+  <style>
+    body { background:#0f172a; color:white; font-family:sans-serif; padding:20px; }
+    .card { background:#1e293b; padding:20px; border-radius:10px; max-width:400px; }
+    h1 { margin-top:0; }
+    span.label { color:#94a3b8; }
+  </style>
+</head>
+<body>
+  <h1>Painel de Monitorização</h1>
+
+  <div class="card">
+    <p><span class="label">Estado:</span> <span id="status">-</span></p>
+    <p><span class="label">Uptime:</span> <span id="uptime">-</span> s</p>
+    <p><span class="label">Timestamp:</span> <span id="timestamp">-</span></p>
+  </div>
+
+  <script>
+  async function loadStatus() {
+    try {
+      const res = await fetch('/');
+      const data = await res.json();
+
+      document.getElementById('status').textContent = data.status || 'desconhecido';
+      document.getElementById('uptime').textContent = Math.floor(data.uptime || 0);
+      document.getElementById('timestamp').textContent = data.timestamp || '-';
+    } catch (err) {
+      document.getElementById('status').textContent = 'offline';
+    }
+  }
+
+  loadStatus();
+  setInterval(loadStatus, 3000);
+</script>
+
+</body>
+</html>

@@ -1,13 +1,9 @@
-// Carrega variáveis de ambiente do .env
+// src/server.js
 require('dotenv').config();
-
-// Importa a app principal
 const app = require('./index');
 
-// Define a porta
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
-// Inicia o servidor
 app.listen(PORT, () => {
   console.log(`Servidor ativo em http://localhost:${PORT}`);
 });
