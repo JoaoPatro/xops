@@ -44,13 +44,13 @@ jobs:
           path: coverage
 
       # 7) AI code review (quality gate)
-      - name: AI code review (XOPS-23)
+      - name: AI code review
         run: npm run ai-review
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
       # 8) AI SAST Security Gate
-      - name: AI SAST security gate (XOPS-23)
+      - name: AI SAST security gate
         run: npm run ai-sast
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}

@@ -59,7 +59,6 @@ function extractJson(raw) {
     const codeToAnalyse = readCodeFiles();
 
     console.log(' [AI SAST] A chamar a API da OpenAI para analisar segurança do código...');
-    console.log('----------------------------------------');
 
     const response = await client.chat.completions.create({
       model: 'gpt-4.1-mini',
@@ -95,9 +94,8 @@ function extractJson(raw) {
     });
 
     const raw = response.choices?.[0]?.message?.content?.trim();
-    console.log('📦 Resposta RAW da IA (SAST):');
+    console.log(' Resposta RAW da IA (SAST):');
     console.log(raw);
-    console.log('----------------------------------------');
 
     let parsed;
     try {
@@ -119,7 +117,6 @@ function extractJson(raw) {
     (vulnerabilidades || []).forEach((v, i) => console.log(`    ${i + 1}. ${v}`));
     console.log('  Recomendações:');
     (recomendacoes || []).forEach((r, i) => console.log(`    ${i + 1}. ${r}`));
-    console.log('----------------------------------------');
 
     if (typeof score !== 'number' || !nivel) {
       console.error(' [AI SAST] Formato inesperado. Não vou reprovar o pipeline.');

@@ -3,15 +3,18 @@
 
 const express = require('express');
 const path = require('path');
+const helmet = require('helmet');
 
 const app = express();
+
+app.use(helmet());
 app.use(express.json());
 
-// Caminho para a pasta public
+// pasta public (ficheiros estáticos: html, css, js, etc.)
 const publicPath = path.join(__dirname, '..', 'public');
 app.use(express.static(publicPath));
 
-// Rota principal (usada nos testes)
+// endpoint principal (usado também nos testes)
 app.get('/', (req, res) => {
   res.json({
     msg: 'Hello from Sprint 13',
@@ -21,31 +24,33 @@ app.get('/', (req, res) => {
   });
 });
 
-// Lista simples de utilizadores
+// lista simples de utilizadores (para exemplo/testes)
+const users = [
+  { id: 1, name: 'João' },
+  { id: 2, name: 'Rafaela' },
+  { id: 3, name: 'Miguel' }
+];
+
 app.get('/users', (req, res) => {
-  res.json([
-    { id: 1, name: 'João' },
-    { id: 2, name: 'Rafaela' },
-    { id: 3, name: 'Miguel' }
-  ]);
+  res.json(users);
 });
 
-// Página about
+// página about
 app.get('/about', (req, res) => {
   res.sendFile(path.join(publicPath, 'about.html'));
 });
 
-// Alternativa para /about.html
+// alternativa para aceder diretamente a /about.html
 app.get('/about.html', (req, res) => {
-  res.sendFile(path.join(publicPath, 'about.html'));
+  res.redirect('/about');
 });
 
-// Monitor → redireciona para o dashboard
+// /monitor → redireciona para o ficheiro monitor.html estático
 app.get('/monitor', (req, res) => {
   res.redirect('/monitor.html');
 });
 
-// Healthcheck (usado pelo dashboard)
+// healthcheck (pode ser usado por um dashboard ou monitorização externa)
 app.get('/health', (req, res) => {
   res.json({
     status: 'ok',
