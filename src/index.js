@@ -1,44 +1,41 @@
+// src/index.js
+// Ficheiro principal da aplicação Express. Define rotas e exporta o app.
+
 const express = require('express');
 const path = require('path');
 
-console.log('>>> ESTE É O index.js QUE O NODE ESTÁ A USAR!', __filename);
+const app = express();
 
+// Middleware básico
+app.use(express.json());
 
-const app = express(); 
-
-// 1) Caminho para a pasta public (que está fora de src)
+// Caminho para a pasta pública (onde está o about.html)
 const publicPath = path.join(__dirname, '..', 'public');
-console.log('📁 publicPath =', publicPath);
 
-// 2) Servir ficheiros estáticos (about.html, css, imagens, etc.)
+// Servir ficheiros estáticos da pasta public
 app.use(express.static(publicPath));
 
-// 3) Rota principal da API (usada nos testes)
+// Rota principal usada nos testes automatizados
 app.get('/', (req, res) => {
   res.json({ msg: 'Hello from Sprint 13' });
 });
 
+// Lista simples de utilizadores (devolvida em /users)
 app.get('/users', (req, res) => {
-  console.log('>>> ENTROU NA ROTA /users DO index.js');
-
   res.json([
-    { id: 1, name: 'Joãooo' },
-    { id: 2, name: 'Micaela' },
+    { id: 1, name: 'João' },
+    { id: 2, name: 'Rafaela' },
     { id: 3, name: 'Miguel' }
   ]);
 });
 
-
-
-// 5) Rota /about (sem .html)
+// Rota para devolver a página about.html
 app.get('/about', (req, res) => {
-  console.log('➡️ GET /about');
   res.sendFile(path.join(publicPath, 'about.html'));
 });
 
-// 6) Rota /about.html
+// Rota alternativa para aceder diretamente a /about.html
 app.get('/about.html', (req, res) => {
-  console.log('➡️ GET /about.html');
   res.sendFile(path.join(publicPath, 'about.html'));
 });
 

@@ -2,50 +2,58 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ main, "XOPS-*" ]
+    branches: [ "main", "XOPS-*" ]
   pull_request:
-    branches: [ main ]
+    branches: [ "main" ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout do repositório
-      - name:  Checkout do repositório
+      # 1) Checkout do repositório
+      - name: Checkout do repositório
         uses: actions/checkout@v4
 
-      # 2️⃣ Configurar Node.js
-      - name: ⚙️ Configurar Node.js
+      # 2) Configurar Node.js
+      - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: npm
+          node-version: "20"
+          cache: "npm"
 
-      # 3️⃣ Instalar dependências
-      - name:  Instalar dependências
+      # 3) Instalar dependências
+      - name: Instalar dependências
         run: npm ci
 
-      # 4️⃣ Executar testes Jest com cobertura
-      - name:  Correr testes Jest
-        run: npm test -- --coverage
+      # 4) Lint (análise estática de estilo)
+      - name: Correr lint
+        run: npm run lint
 
-      # 5️⃣ Guardar relatório de cobertura (artefacto)
-      - name:  Guardar relatório de cobertura
+      # 5) Testes Jest com cobertura
+      - name: Correr testes Jest com cobertura
+        run: npm test
+
+      # 6) DAST – testes de segurança dinâmicos
+      - name: Correr testes DAST
+        run: npm run dast
+
+      # 7) Guardar relatório de cobertura (artefacto)
+      - name: Guardar relatório de cobertura
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: coverage
 
-      # 6️⃣ Etapa de integração com IA (XOPS-23)
-      - name:  AI code review (XOPS-23)
+      # 8) AI code review (quality gate)
+      - name: AI code review (XOPS-23)
+        run: npm run ai-review
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: npm run ai-review
 
-        # 7) Executar AI SAST Security Gate (XOPS-24)
-      - name: Run AI SAST security gate
+      # 9) AI SAST Security Gate
+      - name: AI SAST security gate (XOPS-23)
         run: npm run ai-sast
         env:
-         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-#teste
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}

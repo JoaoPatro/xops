@@ -1,4 +1,4 @@
-// ai-review.js
+
 // Script que faz uma chamada REAL à API da OpenAI para rever o código
 
 require('dotenv').config();
@@ -9,7 +9,7 @@ const OpenAI = require('openai');
 // 1) Ler chave da variável de ambiente
 const apiKey = process.env.OPENAI_API_KEY;
 if (!apiKey) {
-  console.error('❌ OPENAI_API_KEY não definida. Verifica o .env (local) ou os Secrets do GitHub.');
+  console.error(' OPENAI_API_KEY não definida. Verifica o .env (local) ou os Secrets do GitHub.');
   process.exit(1);
 }
 
@@ -18,7 +18,7 @@ const client = new OpenAI({ apiKey });
 
 /**
  * Lê o ficheiro de código que queremos rever.
- * Aqui vou usar o src/index.js e src/server.js como exemplo.
+ * Aqui usamos o src/index.js e src/server.js como exemplo.
  */
 function readCodeFiles() {
   const files = ['src/index.js', 'src/server.js'];
@@ -44,7 +44,7 @@ function readCodeFiles() {
     console.log(' [AI Review] A chamar a API da OpenAI para rever o código...');
     console.log('----------------------------------------');
 
-    // 3) Chamar a API de chat/completions (modelo moderno)
+    // 3) Chamar a API de chat/completions 
     const response = await client.chat.completions.create({
       model: 'gpt-4.1-mini',
       messages: [
