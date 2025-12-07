@@ -4,11 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node src/server.js",
-    "test": "jest --coverage",
-    "lint": "eslint . --ext .js",
-    "ai-review": "node ai-review.js",
-    "ai-sast": "node ai-sast.js"
+  "start": "node src/server.js",
+  "test": "jest --coverage",
+  "ai-review": "node ai-review.js",
+  "ai-sast": "node ai-sast.js",
+  "dast": "node dast-scan.js"
+    
   },
   "keywords": [],
   "author": "",
