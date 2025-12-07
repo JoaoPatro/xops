@@ -4,12 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-  "start": "node src/server.js",
-  "test": "jest --coverage",
-  "ai-review": "node ai-review.js",
-  "ai-sast": "node ai-sast.js",
-  "dast": "node dast-scan.js"
-    
+    "start": "node src/server.js",
+    "test": "jest --coverage",
+    "ai-review": "node ai-review.js",
+    "ai-sast": "node ai-sast.js",
+    "dast": "node dast-scan.js"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +16,7 @@
   "dependencies": {
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
+    "helmet": "^8.1.0",
     "openai": "^4.0.0"
   },
   "devDependencies": {
