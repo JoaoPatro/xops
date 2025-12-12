@@ -45,7 +45,7 @@ app.get('/about.html', (req, res) => {
   res.redirect('/about');
 });
 
-// /monitor → redireciona para o ficheiro monitor.html estático
+// /monitor → redireciona para o ficheiro monitor.html 
 app.get('/monitor', (req, res) => {
   res.redirect('/monitor.html');
 });
@@ -60,4 +60,4 @@ app.get('/health', (req, res) => {
 });
 
 module.exports = app;
-//nota teste
+//nota teste2
